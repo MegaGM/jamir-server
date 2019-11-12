@@ -12,7 +12,7 @@ services:
       - btlp-network
     volumes:
       - .:/app
-      - /home/mega/github/jamir-browser-client/dist/:/usr/src/jamir-browser-client-dist
+      - /home/mega/github/jamir-browser-client/dist/:/app/jamir-browser-client-dist
     environment:
       - NODE_ENV=development
     working_dir: /app
