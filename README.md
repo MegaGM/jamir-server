@@ -1,0 +1,1 @@
+### Hello, wanderer! Chances are ~99.999% that you don't need this repo. Don't waste your time.
