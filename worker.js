@@ -3,7 +3,6 @@ process.env.IN_DOCKER_CONTAINER = require('./src/detectDocker')()
 const SCWorker = require('socketcluster/scworker')
 const express = require('express')
 const serveStatic = require('serve-static')
-const morgan = require('morgan')
 const healthChecker = require('sc-framework-health-check')
 const fs = require('fs-extra')
 const path = require('path')
@@ -25,6 +24,7 @@ class Worker extends SCWorker {
     if (environment === 'dev') {
       // Log every HTTP request.
       // See https://github.com/expressjs/morgan for other available formats.
+      const morgan = require('morgan')
       app.use(morgan('dev'))
     }
 
