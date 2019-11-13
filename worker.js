@@ -1,3 +1,5 @@
+process.env.IN_DOCKER_CONTAINER = require('./src/detectDocker')()
+
 const SCWorker = require('socketcluster/scworker')
 const express = require('express')
 const serveStatic = require('serve-static')
