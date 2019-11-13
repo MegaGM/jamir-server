@@ -5,6 +5,8 @@ const morgan = require('morgan')
 const healthChecker = require('sc-framework-health-check')
 const fs = require('fs-extra')
 const path = require('path')
+
+const { setupAPI } = require('./src/api')
 const browserClientDist = 'jamir-browser-client-dist'
 const indexHtml = fs.readFileSync(path.resolve(__dirname, browserClientDist, 'index.html'), 'utf8')
 
@@ -46,32 +48,7 @@ class Worker extends SCWorker {
     healthChecker.attach(this, app)
 
     httpServer.on('request', app)
-
-    /**
-     * NOTE: Be sure to replace the following sample logic with your own logic.
-     */
-
-    let count = 0
-    // Handle incoming websocket connections and listen for events.
-    scServer.on('connection', function (socket) {
-
-      socket.on('sampleClientEvent', function (data) {
-        count++
-        console.log('Handled sampleClientEvent', data)
-        scServer.exchange.publish('sample', count)
-      })
-
-      const interval = setInterval(function () {
-        socket.emit('random', {
-          number: Math.floor(Math.random() * 5)
-        })
-      }, 1000)
-
-      socket.on('disconnect', function () {
-        clearInterval(interval)
-      })
-
-    })
+    setupAPI(scServer)
   }
 }
 
