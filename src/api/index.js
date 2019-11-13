@@ -8,6 +8,10 @@ function setupAPI(scServer) {
       console.info('a socket disconnected')
     })
 
-    socket.on('uploadAddressProgram', require('./uploadAddressProgram').bind({ socket, scServer }))
+    socket.on('uploadAddressProgram', includeAPI('./uploadAddressProgram'))
+
+    function includeAPI(path) {
+      return require(path).bind({ socket, scServer })
+    }
   })
 }
