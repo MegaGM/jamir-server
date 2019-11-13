@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run in Node.js",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}/server.js",
+      // "protocol": "inspector",
+      "console": "integratedTerminal",
+      // "console": "internalConsole",
+      "autoAttachChildProcesses": true,
+      "args": [
+        // "--inspect-brokers",
+        "--inspect-workers",
+        // "--inspect-brokers-brk",
+        // "--inspect-workers-brk",
+        // "--inspect-workers=5859",
+        "--log-level=5"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "SOCKETCLUSTER_WORKERS": "2",
+      }
+    },
+  ]
+}
