@@ -21,7 +21,7 @@
       ],
       "env": {
         "NODE_ENV": "development",
-        "SOCKETCLUSTER_WORKERS": "2",
+        "SOCKETCLUSTER_WORKERS": "1",
       }
     },
   ]
