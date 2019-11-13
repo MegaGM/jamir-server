@@ -1,5 +1,5 @@
-const db = null
 const MongoClient = require('mongodb').MongoClient
+let db = null
 
 module.exports = getMongoDB
 
@@ -12,10 +12,10 @@ async function getMongoDB() {
   }
 }
 
-const mongoURL = `mongodb://${process.env.IN_DOCKER_CONTAINER ? 'mongodb' : 'localhost'}:27017`
-
 async function connectToDB() {
-  const mongodb = await MongoClient.connect(mongoURL, { useNewUrlParser: true })
+  const mongoURL = `mongodb://${process.env.IN_DOCKER_CONTAINER === 'true' ? 'mongodb' : 'localhost'}:27017`
+  const options = { useNewUrlParser: true, useUnifiedTopology: true }
+  const mongodb = await MongoClient.connect(mongoURL, options)
   const btlDB = await mongodb.db('btl')
   return btlDB
 }
