@@ -15,6 +15,13 @@ async function uploadAddressProgram({ title, file }, callback) {
     const baseJSON = XLSX.utils.sheet_to_json(base)
 
     for (const entry of baseJSON) {
+      if (!entry['Город']) {
+        throw new Error(`В строке ${JSON.stringify(entry)} отсутствует поле "Город"`)
+      }
+      if (!entry['Адрес']) {
+        throw new Error(`В строке ${JSON.stringify(entry)} отсутствует поле "Адрес"`)
+      }
+
       const DBDocument = {
         city: entry['Город'],
         address: entry['Адрес'],
