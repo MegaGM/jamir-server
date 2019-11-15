@@ -1,8 +1,6 @@
 const XLSX = require('xlsx')
 
-module.exports = uploadAddressProgram
-
-async function uploadAddressProgram({ title, file }, callback) {
+module.exports = async function ({ title, file }, callback) {
   const DBDocuments = []
 
   try {
@@ -16,10 +14,10 @@ async function uploadAddressProgram({ title, file }, callback) {
 
     for (const entry of baseJSON) {
       if (!entry['Город']) {
-        throw new Error(`В строке ${JSON.stringify(entry)} отсутствует поле "Город"`)
+        throw new Error(`Отсутствует поле "Город" в строке ${JSON.stringify(entry)}`)
       }
       if (!entry['Адрес']) {
-        throw new Error(`В строке ${JSON.stringify(entry)} отсутствует поле "Адрес"`)
+        throw new Error(`Отсутствует поле "Адрес" в строке ${JSON.stringify(entry)}`)
       }
 
       const DBDocument = {
@@ -33,13 +31,20 @@ async function uploadAddressProgram({ title, file }, callback) {
   }
 
   try {
-    const db = await require('../getMongoDB')()
-    const res = await db.collection('address-programs').insertOne({ title, rows: DBDocuments.length })
-    const newAddressProgramId = res.insertedId.toString()
-    const res2 = await db.collection(newAddressProgramId).insertMany(DBDocuments)
+    const db = await require('../../getMongoDB')()
+    const ap = {
+      title: title.replace('.xlsx', ''),
+      rowCount: DBDocuments.length,
+      editable: false,
+      // timestamp: new Date().getTime(),
+    }
+    const res = await db.collection('address-programs').insertOne(ap)
+    const apId = res.insertedId.toString()
+    const res2 = await db.collection(apId).insertMany(DBDocuments)
+
+    callback(null)
+    this.scServer.exchange.publish('reloadAddressPrograms')
   } catch (err) {
     return callback({ message: `Не удалось сохранить файл "${title}" в базу данных, по причине: ${err.message}` })
   }
-
-  callback(null)
 }
