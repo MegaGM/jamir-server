@@ -22,12 +22,14 @@ var workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCL
 var environment = process.env.ENV || 'dev';
 
 var options = {
-  workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
-  brokers: Number(argv.b) || Number(process.env.SOCKETCLUSTER_BROKERS) || 1,
+  appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || null,
   port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || 8000,
   // You can switch to 'sc-uws' for improved performance.
   wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'ws',
-  appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || null,
+  // TODO: change for production
+  pintTimeout: 5 * 60 * 1000,
+  workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
+  brokers: Number(argv.b) || Number(process.env.SOCKETCLUSTER_BROKERS) || 1,
   workerController: workerControllerPath || path.join(__dirname, 'worker.js'),
   brokerController: brokerControllerPath || path.join(__dirname, 'broker.js'),
   workerClusterController: workerClusterControllerPath || null,
@@ -96,10 +98,10 @@ var filesReadyPromises = [
   startWhenFileIsReady(workerClusterControllerPath)
 ];
 Promise.all(filesReadyPromises)
-.then(() => {
-  start();
-})
-.catch((err) => {
-  console.error(err.stack);
-  process.exit(1);
-});
+  .then(() => {
+    start();
+  })
+  .catch((err) => {
+    console.error(err.stack);
+    process.exit(1);
+  });
