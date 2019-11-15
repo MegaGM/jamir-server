@@ -35,8 +35,9 @@ module.exports = async function ({ title, file }, callback) {
     const ap = {
       title: title.replace('.xlsx', ''),
       rowCount: DBDocuments.length,
-      editable: false,
-      // timestamp: new Date().getTime(),
+      // the following values are being injected by "decorateAddressProgramsForBrowserClient" decorator
+      // editable
+      // humanReadableTimestamp
     }
     const res = await db.collection('address-programs').insertOne(ap)
     const apId = res.insertedId.toString()

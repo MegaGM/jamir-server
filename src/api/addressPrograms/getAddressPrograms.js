@@ -3,7 +3,8 @@ module.exports = async function ({ offset, limit, order }, callback) {
     const db = await require('../../getMongoDB')()
     const c = await db.collection('address-programs').find()
     const addressProgramsCount = await c.count()
-    const addressPrograms = await c.skip(offset).limit(limit).sort(order).toArray()
+    let addressPrograms = await c.skip(offset).limit(limit).sort(order).toArray()
+    addressPrograms = addressPrograms.map(require('./decorateAddressProgramsForBrowserClient'))
     callback(null, { addressProgramsCount, addressPrograms })
   } catch (err) {
     return callback({ message: `Не удалось получить Адресные Программы из базы данных, по причине: ${err.message}` })
