@@ -6,7 +6,8 @@ module.exports = getMongoDB
 async function getMongoDB() {
   if (db) {
     return db
-  } else {
+  }
+  else {
     db = await connectToDB()
     return db
   }
