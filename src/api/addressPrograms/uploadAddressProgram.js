@@ -20,9 +20,32 @@ module.exports = async function ({ title, file }, callback) {
         throw new Error(`Отсутствует поле "Адрес" в строке ${JSON.stringify(entry)}`)
       }
 
+      let [streetName, streetKind, buildingNumber] = entry['Адрес'].split(',')
+      if (!buildingNumber) {
+        // for addresses like 'п. Механизаторов, 48' and 'п. Фабрики им П.Л.Войкова, 27'
+        buildingNumber = streetKind
+        streetKind = ''
+
+        if (!buildingNumber) { // if address is invalid
+          throw new Error(`Не удалось распарсить поле "Адрес" в строке ${JSON.stringify(entry)}`)
+        }
+      }
+      streetName = streetName.trim()
+      streetKind = streetKind.trim()
+      buildingNumber = buildingNumber.trim()
+
+      const buildingBaseNumberRegex = /([^а-я/]+)/i
+      const match = buildingNumber.match(buildingBaseNumberRegex)
+      if (!match) {
+        throw new Error(`Не удалось распарсить номер здания в поле "Адрес" в строке ${JSON.stringify(entry)}`)
+      }
+      const buildingBaseNumber = match[0]
+
       const DBDocument = {
         city: entry['Город'],
         address: entry['Адрес'],
+        streetName,
+        buildingBaseNumber,
       }
       DBDocuments.push(DBDocument)
     }
