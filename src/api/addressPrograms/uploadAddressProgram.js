@@ -2,6 +2,7 @@ const XLSX = require('xlsx')
 
 module.exports = async function ({ title, file }, callback) {
   const DBDocuments = []
+  const cities = {}
 
   try {
     const split = file.split(',')[1] // get rid of base64URL scheme header
@@ -16,10 +17,14 @@ module.exports = async function ({ title, file }, callback) {
       if (!entry['Город']) {
         throw new Error(`Отсутствует поле "Город" в строке ${JSON.stringify(entry)}`)
       }
+      if (!cities[entry['Город']]) {
+        cities[entry['Город']] = 0
+      }
+      cities[entry['Город']]++
+
       if (!entry['Адрес']) {
         throw new Error(`Отсутствует поле "Адрес" в строке ${JSON.stringify(entry)}`)
       }
-
       let [streetName, streetKind, buildingNumber] = entry['Адрес'].split(',')
       if (!buildingNumber) {
         // for addresses like 'п. Механизаторов, 48' and 'п. Фабрики им П.Л.Войкова, 27'
@@ -39,7 +44,7 @@ module.exports = async function ({ title, file }, callback) {
       if (!match) {
         throw new Error(`Не удалось распарсить номер здания в поле "Адрес" в строке ${JSON.stringify(entry)}`)
       }
-      const buildingBaseNumber = match[0]
+      const buildingBaseNumber = parseInt(match[0], 10)
 
       const DBDocument = {
         city: entry['Город'],
@@ -57,7 +62,8 @@ module.exports = async function ({ title, file }, callback) {
     const db = await require('../../getMongoDB')()
     const ap = {
       title: title.replace('.xlsx', ''),
-      rowCount: DBDocuments.length,
+      totalRowCount: DBDocuments.length,
+      cities,
       // the following values are being injected by "decorateAddressProgramsForBrowserClient" decorator
       // editable
       // humanReadableTimestamp
