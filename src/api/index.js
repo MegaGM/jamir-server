@@ -8,7 +8,7 @@ function setupAPI(scServer) {
       console.info('a socket disconnected')
     })
 
-    socket.on('getAddressProgram', includeAPI('./addressPrograms/getAddressProgram'))
+    socket.on('getAddressProgramWithRows', includeAPI('./addressPrograms/getAddressProgramWithRows'))
     socket.on('getAddressPrograms', includeAPI('./addressPrograms/getAddressPrograms'))
     socket.on('uploadAddressProgram', includeAPI('./addressPrograms/uploadAddressProgram'))
     socket.on('updateAddressProgramTitle', includeAPI('./addressPrograms/updateAddressProgramTitle'))
