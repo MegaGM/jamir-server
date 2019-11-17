@@ -1,3 +1,4 @@
+process.env.IN_DOCKER_CONTAINER = require('./src/detectDocker')()
 /*
   This is the SocketCluster master controller file.
   It is responsible for bootstrapping the SocketCluster master process.
@@ -75,10 +76,12 @@ var start = function () {
     // The second options argument here is passed directly to chokidar.
     // See https://github.com/paulmillr/chokidar#api for details.
     console.log(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
-    scHotReboot.attach(socketCluster, {
-      cwd: __dirname,
-      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[\/\\]\./, '*.log']
-    });
+    if (process.env.IN_DOCKER_CONTAINER === 'true') {
+      scHotReboot.attach(socketCluster, {
+        cwd: __dirname,
+        ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[\/\\]\./, '*.log']
+      });
+    }
   }
 };
 
