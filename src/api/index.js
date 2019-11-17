@@ -14,6 +14,9 @@ function setupAPI(scServer) {
     socket.on('updateAddressProgramTitle', includeAPI('./addressPrograms/updateAddressProgramTitle'))
     socket.on('deleteAddressProgram', includeAPI('./addressPrograms/deleteAddressProgram'))
 
+    socket.on('uploadReport', includeAPI('./reports/uploadReport'))
+    socket.on('deleteReport', includeAPI('./reports/deleteReport'))
+
     function includeAPI(path) {
       return require(path).bind({ socket, scServer })
     }
