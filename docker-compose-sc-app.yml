@@ -15,26 +15,9 @@ services:
       - /home/mega/github/jamir-browser-client/dist/:/app/jamir-browser-client-dist
     environment:
       - NODE_ENV=development
+      - TZ=Europe/Moscow
     working_dir: /app
-
-  # mongodb:
-  #   container_name: mongodb
-  #   # restart: always
-  #   image: mongo:latest
-  #   ports:
-  #     - "27017:27017"
-  #   networks:
-  #     - btlp-network
-  #   volumes:
-  #     - mongo-db-volume:/data/db
-  #     - mongo-configdb-volume:/data/configdb
 
 networks:
   btlp-network:
     driver: bridge
-
-# volumes:
-#   mongo-db-volume:
-#     driver: local
-#   mongo-configdb-volume:
-#     driver: local

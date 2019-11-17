@@ -1,5 +1,8 @@
 FROM node:lts-alpine
 
+RUN apk add --no-cache tzdata
+ENV TZ Europe/Moscow
+
 RUN mkdir -p /app
 WORKDIR /app
 # COPY ./package.json ./package-lock.json /app

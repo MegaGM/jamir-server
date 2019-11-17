@@ -1,22 +1,5 @@
 version: "3.7"
 services:
-  # app:
-  #   container_name: sc-app
-  #   # restart: always
-  #   build: .
-  #   depends_on:
-  #     - mongodb
-  #   ports:
-  #     - "8000:8000"
-  #   networks:
-  #     - btlp-network
-  #   volumes:
-  #     - .:/app
-  #     - /home/mega/github/jamir-browser-client/dist/:/app/jamir-browser-client-dist
-  #   environment:
-  #     - NODE_ENV=development
-  #   working_dir: /app
-
   mongodb:
     container_name: mongodb
     # restart: always
@@ -28,6 +11,8 @@ services:
     volumes:
       - mongo-db-volume:/data/db
       - mongo-configdb-volume:/data/configdb
+    environment:
+      - TZ=Europe/Moscow
 
 networks:
   btlp-network:
